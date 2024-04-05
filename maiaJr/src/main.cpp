@@ -38,7 +38,7 @@ void setup()
   
   	//SETUP ULTRASSONIC
   	pinMode(sonarTrigger,OUTPUT);
-    pinMode(sonarEcho,INPUT);
+    	pinMode(sonarEcho,INPUT);
   	//leitura dos dados
   	Serial.begin(9600);
   
