@@ -6,7 +6,7 @@
 #define velm1 6
 #define m1a 13
 #define m1b 12
-#define tmp 5000
+
 
 //Motor2
 #define velm2 5
@@ -14,7 +14,7 @@
 #define m2b 3
 
 //Leitura do Estado do robô
-bool movingForward = true;
+//bool movingForward = true;
 
 //Ultrassonic
 #define sonarTrigger 9
@@ -38,7 +38,7 @@ void setup()
   
   	//SETUP ULTRASSONIC
   	pinMode(sonarTrigger,OUTPUT);
-    	pinMode(sonarEcho,INPUT);
+    pinMode(sonarEcho,INPUT);
   	//leitura dos dados
   	Serial.begin(9600);
   
@@ -70,15 +70,26 @@ void moveForward(){
   digitalWrite(m2b, LOW);
 }
 
+void moveBackward(){
+  //M1 move Backward
+  analogWrite(velm1,63);
+  digitalWrite(m1a, LOW);
+  digitalWrite(m1b, HIGH);
+
+  //M2 move Backward
+  analogWrite(velm2,63);
+  digitalWrite(m2a, LOW);
+  digitalWrite(m2b, HIGH);
+}
 
 void turnLeft(){
   //M1 move Forward
-  analogWrite(velm1,126);
+  analogWrite(velm1,63);
   digitalWrite(m1a, HIGH);
   digitalWrite(m1b, LOW);
-  
+
   //M2 move Backward
-  analogWrite(velm2,126);
+  analogWrite(velm2,63);
   digitalWrite(m2a, LOW);
   digitalWrite(m2b, HIGH);
   	
@@ -102,21 +113,21 @@ void loop()
   	distance = time/58.2;  //calculo velocidade do som
   
   //Inicialização do robô (Alguns segundos parado)
-	delay(3000);
+
     	
   // Estado do robô e tomada de decisão
-    if (movingForward) {
-        if (distance <= 40) {
-            stop();
-            movingForward = false;
-            delay(1000); 
-        } else {
-            moveForward();
-        }
-    } else {
+      if (distance > 0 && distance < 10 ) {
+        stop();
+        delay(1000);
+        moveBackward();
+        delay(1500);
         turnLeft();
         delay(1000); 
-        movingForward = true; // Volta a mover para frente 
+        moveForward(); // Volta a mover para frente
+} else  {
+
+        moveForward(); // Volta a mover para frente
+
     }
-  
+  Serial.println(distance); 
 }
